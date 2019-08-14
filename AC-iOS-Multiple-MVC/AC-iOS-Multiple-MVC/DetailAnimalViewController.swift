@@ -9,8 +9,17 @@
 import UIKit
 
 class DetailAnimalViewController: UIViewController {
-
+    
+    var selectedCell: ZooAnimal!
+    
+    @IBOutlet weak var detailAnimalImage: UIImageView!
+    @IBOutlet weak var detailAnimalNameLabel: UILabel!
+    @IBOutlet weak var detailDescriptionTextView: UITextView!
+    
     override func viewDidLoad() {
+        detailAnimalImage.image = UIImage(named: String(selectedCell.imageNumber))
+        detailAnimalNameLabel.text = selectedCell.name
+        detailDescriptionTextView.text = selectedCell.info
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.

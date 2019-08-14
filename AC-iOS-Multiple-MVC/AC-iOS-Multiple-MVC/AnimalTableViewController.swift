@@ -9,12 +9,19 @@
 import UIKit
 
 class AnimalTableViewController: UITableViewController {
+    
+    //MARK:  These are all my variables
+    
+    let model = ZooAnimal.zooAnimals
+    let birdSection = ZooAnimal.sortBirds()
+    let insectsSection = ZooAnimal.sortInsects()
+    let mammalsSection = ZooAnimal.sortMammals()
+    let reptileSection = ZooAnimal.sortReptiles()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+       
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
@@ -24,23 +31,90 @@ class AnimalTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 4
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        switch section {
+        case 0:
+            return ZooAnimal.sortBirds().count
+        case 1:
+            return ZooAnimal.sortInsects().count
+        case 2:
+            return ZooAnimal.sortMammals().count
+        case 3:
+            return ZooAnimal.sortReptiles().count
+        default:
+            return 0
+            
+        }
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "animalCell", for: indexPath) as? AnimalTableViewCell {
+            switch indexPath.section {
+            case 0:
+                cell.animalNameOutlet.text = birdSection[indexPath.row].name
+                cell.originCountryOutlet.text = birdSection[indexPath.row].origin
+                cell.animalImageOutlet.image = UIImage(named: String(birdSection[indexPath.row].imageNumber))
+            case 1:
+                cell.animalNameOutlet.text = insectsSection[indexPath.row].name
+                cell.originCountryOutlet.text = insectsSection[indexPath.row].origin
+                cell.animalImageOutlet.image = UIImage(named: String(insectsSection[indexPath.row].imageNumber))
+            case 2:
+                cell.animalNameOutlet.text = mammalsSection[indexPath.row].name
+                cell.originCountryOutlet.text = mammalsSection[indexPath.row].origin
+                cell.animalImageOutlet.image = UIImage(named: String(mammalsSection[indexPath.row].imageNumber))
+            case 3:
+                cell.animalNameOutlet.text = reptileSection[indexPath.row].name
+                cell.originCountryOutlet.text = reptileSection[indexPath.row].origin
+                cell.animalImageOutlet.image = UIImage(named: String(reptileSection[indexPath.row].imageNumber))
+            default:
+                print("Something went wrong")
+            }
+            return cell
+        }
+        return UITableViewCell()
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let segueIdentifier = segue.identifier else { fatalError ("No identifier in segue") }
+        
+        switch segueIdentifier {
+        case "segueToDetailAnimals":
+            guard let animalDetailVC = segue.destination as? DetailAnimalViewController
+                else { fatalError ("Unexpected segue") }
+            guard let selectedIndexPath = tableView.indexPathForSelectedRow else { fatalError("No row selected")
+            }
+            animalDetailVC.selectedCell = model[selectedIndexPath.row]
+        default:
+            fatalError("Unexpected segue identifier")
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section{
+        case 0:
+            return "Birds"
+        case 1:
+            return "Insects"
+        case 2:
+            return "Mammals"
+        case 3:
+            return "Reptiles"
+        default:
+            return "It's something"
+        }
+    }
+    
+    
+}
 
     /*
     // Override to support conditional editing of the table view.
@@ -87,4 +161,4 @@ class AnimalTableViewController: UITableViewController {
     }
     */
 
-}
+
